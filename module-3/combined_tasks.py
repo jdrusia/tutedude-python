@@ -18,12 +18,12 @@ def sum_1_to_50():
     for number in range(1, 51):
         total_sum += number
 
-    print(f"The sum of numbers from 1 to 50 is: {total_sum}")
+    print(f"The sum of integers from 1 to 50 is: {total_sum}")
 
 
 print("\n===== Module 3 Menu =====")
-print("1. Check if a number is Even or Odd")
-print("2. Find the Sum of numbers from 1 to 50")
+print("1. Check if a Number is Even or Odd")
+print("2. Find the Sum of Integers from 1 to 50 Using a Loop")
 
 choice = input("Enter your choice (1-2): ")
 
@@ -33,7 +33,6 @@ if choice == "1":
 
 elif choice == "2":
     sum_1_to_50()
-
 
 else:
     print("Invalid choice.")

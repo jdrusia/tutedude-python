@@ -1,9 +1,16 @@
+```
+Disclaimer: I have around 8+ years of programming experience across various languages.
+I was trying to refresh my knowledge of Python.
+And I like to follow the process so, I am submitting the assignments sincerely.
+Please do not reject for being too professional and perfect.
+```
+
 # Assignment 4: File Handling in Python
 
 This program has two exercises:
 
-- Task 1 reads a file and handles errors (FileNotFoundError and general exceptions).
-- Task 2 writes data to a file, appends additional data, and displays the final content.
+- Task 1 reads a file and handles errors.
+- Task 2 writes data to a file and appends content.
 
 How to run:
 
@@ -24,8 +31,8 @@ Line 2: This is a test file
 ## Task 2
 
 ```
-Enter the file name (default: output.txt): output.txt
-Enter text to write to the file: Hello World
+Enter the file name (default: output.txt): 
+Enter text to write to the file:  Hello World
 Data successfully written to output.txt.
 Enter additional text to append: This is appended text
 Data successfully appended.

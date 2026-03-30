@@ -22,17 +22,17 @@ Example output:
 ## Task 1
 
 ```
-Enter the file name (default: output.txt): output.txt
+Enter the file name (default: output.txt):
 Reading file content:
 Line 1: Hello World
-Line 2: This is a test file
+Line 2: This is appended text
 ```
 
 ## Task 2
 
 ```
-Enter the file name (default: output.txt): 
-Enter text to write to the file:  Hello World
+Enter the file name (default: output.txt):
+Enter text to write to the file: Hello World
 Data successfully written to output.txt.
 Enter additional text to append: This is appended text
 Data successfully appended.

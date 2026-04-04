@@ -2,12 +2,14 @@
 
 # importing the tkinter module
 import tkinter as tk
-from tkinter import ttk
+import re
 
 
 # Define the CalculatorApp class
 class CalculatorApp:
     zero_division_error = "Zero Division Error"
+    invalid_expression = "Invalid Expression"
+    invalid_operator = "Invalid Operator"
     error = "Error"
 
     def __init__(self, root: tk.Tk):
@@ -62,7 +64,12 @@ class CalculatorApp:
         current = self.expression.get()
 
         # if curret value has error first clear it and then insert
-        if current == self.zero_division_error or current == self.error:
+        if current in [
+            self.zero_division_error,
+            self.invalid_expression,
+            self.invalid_operator,
+            self.error,
+        ]:
             current = ""
 
         # if current has last value operator and string is also operator
@@ -110,7 +117,112 @@ class CalculatorApp:
         )
         btn.grid(row=row, column=col, padx=2, pady=2, sticky="nsew")
 
+    def apply_operator(self, a, b, operator):
+        # function to apply the operator
+        if operator == "+":
+            return a + b
+        elif operator == "-":
+            return a - b
+        elif operator == "*":
+            return a * b
+        elif operator == "/":
+            return a / b
+
+    def evaluate_helper(self, _list, operator, idx):
+        # helper function to apply the operator and return the modified list
+        result = None
+        if operator == "/":
+            if _list[idx + 1] == "0":
+                raise ZeroDivisionError
+            result = self.apply_operator(
+                float(_list[idx - 1]), float(_list[idx + 1]), "/"
+            )
+        elif operator == "*":
+            result = self.apply_operator(
+                float(_list[idx - 1]), float(_list[idx + 1]), "*"
+            )
+        elif operator == "+":
+            result = self.apply_operator(
+                float(_list[idx - 1]), float(_list[idx + 1]), "+"
+            )
+        elif operator == "-":
+            result = self.apply_operator(
+                float(_list[idx - 1]), float(_list[idx + 1]), "-"
+            )
+        else:
+            # if invalid operator is passed
+            raise ValueError(self.invalid_operator)
+
+        # modify the list, replace the operator and two operands with the result
+        # create a list with elements before the left operand, and append result
+        new_list = _list[: idx - 1] + [str(result)]
+
+        # if there are elements after the right operand, append them
+        if idx + 2 < len(_list):
+            new_list = new_list + _list[idx + 2 :]
+
+        return new_list
+
     def evaluate(self):
+
+        try:
+            # get the current expression
+            current = self.expression.get()
+
+            # use regex to split the expression into numbers and operators
+            _list = re.findall(r"\d+[.]?\d*|[+\-*\/]", current)
+
+            # if empty return
+            if not _list:
+                return
+
+            # only one element, then return
+            if len(_list) == 1:
+                return
+
+            # if initial operator is + or - then combine it with the 2nd element
+            if _list[0] in ["-", "+"]:
+                _list = [f"{_list[0]}{_list[1]}"] + _list[2:]
+
+            # run loop till only on element, result, is left
+            while len(_list) > 1:
+                # find the operators index in the precedence order and evaluate
+                if "/" in _list:
+                    idx = _list.index("/")
+                    _list = self.evaluate_helper(_list, "/", idx)
+
+                elif "*" in _list:
+                    idx = _list.index("*")
+                    _list = self.evaluate_helper(_list, "*", idx)
+
+                elif "+" in _list:
+                    idx = _list.index("+")
+                    _list = self.evaluate_helper(_list, "+", idx)
+
+                elif "-" in _list:
+                    idx = _list.index("-")
+                    _list = self.evaluate_helper(_list, "-", idx)
+
+            result = float(_list[0])
+
+            # if the result type is float and  it is integer, convert it to int to remove decimal
+            if type(result) == float and result.is_integer():
+                result = int(result)
+
+            self.expression.set(str(result))
+
+        except ZeroDivisionError:
+            # if division by zero then show error
+            self.expression.set(self.zero_division_error)
+        except ValueError as e:
+            # if invalid operator is used, show error
+            self.expression.set(str(e))
+        except:
+            # for other errors, show Error
+            self.expression.set(self.error)
+
+    # Not being used
+    def evaluate_eval(self):
         # use eval to evaluate the expression
         try:
             # get the value and eval it
